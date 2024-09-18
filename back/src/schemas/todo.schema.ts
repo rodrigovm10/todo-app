@@ -10,6 +10,14 @@ const todoSchema = z.object({
   completed: z.boolean().default(false)
 })
 
+const todoUpdateSchema = z.object({
+  completed: z.boolean()
+})
+
 export function validateTodo(input: Todo) {
   return todoSchema.safeParse(input)
+}
+
+export function validateUpdateTodo(input: boolean) {
+  return todoUpdateSchema.safeParse(input)
 }

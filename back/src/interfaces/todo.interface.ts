@@ -3,3 +3,8 @@ export interface Todo {
   description?: string
   completed: boolean
 }
+
+export interface TodoUpdate {
+  id: number
+  completed: boolean
+}
