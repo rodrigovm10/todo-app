@@ -25,7 +25,7 @@ export class TodoController {
     res.status(201).json({ message: 'Todo created!', result: newTodo })
   }
 
-  static async updateTodo(req: Request, res: Response) {
+  static async update(req: Request, res: Response) {
     const { id } = req.params
     const result = validateUpdateTodo(req.body)
 
@@ -42,5 +42,17 @@ export class TodoController {
     })
 
     res.status(201).json({ message: 'Todo updated!', result: todoUpdated })
+  }
+
+  static async delete(req: Request, res: Response) {
+    const { id } = req.params
+
+    if (!id) {
+      return res.status(400).json({ message: 'Todo ID must be in the URL!' })
+    }
+
+    const todoDeleted = await TodoModel.delete({ input: Number(id) })
+
+    res.status(200).json({ message: 'Todo deleted!', result: todoDeleted })
   }
 }

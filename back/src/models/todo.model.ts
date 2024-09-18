@@ -13,7 +13,7 @@ export class TodoModel {
     const text = 'INSERT INTO todo(title, description, completed) VALUES($1, $2, $3)'
     const values = [input.title, input.description, input.completed]
 
-    const query = await db.queryInsert(text, values)
+    const query = await db.query(text, values)
 
     return query
   }
@@ -22,7 +22,16 @@ export class TodoModel {
     const text = 'UPDATE todo SET completed = $1 WHERE id = $2'
     const values = [input.completed, input.id]
 
-    const query = await db.queryInsert(text, values)
+    const query = await db.query(text, values)
+
+    return query
+  }
+
+  static async delete({ input }: { input: number }) {
+    const text = 'DELETE FROM todo WHERE id = $1'
+    const values = [input]
+
+    const query = await db.query(text, values)
 
     return query
   }
