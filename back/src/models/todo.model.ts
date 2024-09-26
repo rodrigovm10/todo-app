@@ -43,9 +43,9 @@ export class TodoModel {
       description: input?.description ?? rows[0].description
     }
 
-    const text = 'UPDATE todo SET title = $1, description = $2'
-    const values = [title, description]
-    console.log(values)
+    const text = 'UPDATE todo SET title = $1, description = $2 WHERE id = $3'
+    const values = [title, description, id]
+    console.log(id)
 
     const query = await db.query(text, values)
 
