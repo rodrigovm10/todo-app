@@ -18,7 +18,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Textarea } from '@/components/ui/textarea'
 
 export function TodoList() {
-  const { todos, removeTodo, editTodo } = useTodo()
+  const { todos, removeTodo, editTodo, toggleTodo } = useTodo()
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
 
   return (
@@ -37,7 +37,7 @@ export function TodoList() {
                 <Checkbox
                   id={`todo-${todo.id}`}
                   checked={todo.completed}
-                  // onCheckedChange={() => toggleTodo(todo.id)}
+                  onCheckedChange={() => toggleTodo({ id: todo.id, completed: !todo.completed })}
                   className='mr-3'
                 />
                 <label

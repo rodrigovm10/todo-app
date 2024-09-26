@@ -50,3 +50,15 @@ export const updateTodo = async ({ id, todo }: { id: number; todo: UpdateTodo })
   const data = await result.json()
   console.log(data)
 }
+
+export const updateCompleted = async ({ id, completed }: { id: number; completed: boolean }) => {
+  const result = await fetch(`http://localhost:4000/todo/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ completed })
+  })
+  const data = await result.json()
+  console.log(data)
+}

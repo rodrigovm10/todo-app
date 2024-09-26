@@ -43,6 +43,7 @@ export class TodoController {
 
   static async updateCompleted(req: Request, res: Response) {
     const { id } = req.params
+    console.log(req.body)
     const result = validateUpdateTodo(req.body)
 
     if (!id) {

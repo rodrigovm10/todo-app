@@ -1,5 +1,5 @@
 import { Todo, CreateTodo, UpdateTodo } from '@/interfaces'
-import { fetchAllTodos, createTodo, deleteTodo, updateTodo } from '@/services/todo'
+import { fetchAllTodos, createTodo, deleteTodo, updateTodo, updateCompleted } from '@/services/todo'
 import { useEffect, useState } from 'react'
 
 const NEW_TODO_STATE = { title: '', description: '' }
@@ -24,6 +24,10 @@ export function useTodo() {
     }
   }
 
+  const toggleTodo = async ({ id, completed }: { id: number; completed: boolean }) => {
+    await updateCompleted({ id, completed })
+  }
+
   useEffect(() => {
     async function fetchData() {
       const todosFetched = await fetchAllTodos()
@@ -41,6 +45,7 @@ export function useTodo() {
     setNewTodo,
     newTodo,
     removeTodo,
-    editTodo
+    editTodo,
+    toggleTodo
   }
 }
