@@ -1,4 +1,4 @@
-import { Todo, TodoUpdate } from '../interfaces/todo.interface'
+import { Todo, TodoUpdate, TodoUpdateAll } from '../interfaces/todo.interface'
 import * as db from '../database/db'
 
 export class TodoModel {
@@ -36,7 +36,7 @@ export class TodoModel {
     return query
   }
 
-  static async updateAllTodo({ input, id }: { input: Todo; id: number }) {
+  static async updateAllTodo({ input, id }: { input: TodoUpdateAll; id: number }) {
     const { rows } = await this.getOne({ input: id })
     let { title, description } = {
       title: input?.title ?? rows[0].title,

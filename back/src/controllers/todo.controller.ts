@@ -1,5 +1,9 @@
 import { Request, Response } from 'express'
-import { validateTodo, validateUpdateTodo } from '../schemas/todo.schema'
+import {
+  validateTodo,
+  validateUpdateTodo,
+  validateTodoUpdateAllSchema
+} from '../schemas/todo.schema'
 import { TodoModel } from '../models/todo.model'
 
 export class TodoController {
@@ -19,7 +23,7 @@ export class TodoController {
 
     // If rowCount === 0
     if (!result.rowCount) {
-      return res.status(200).json({ message: `There is not todo with id ${id}` })
+      return res.status(200).json({ message: `There is not todo with ID ${id}` })
     }
 
     res.status(200).json(result.rows)
@@ -53,14 +57,22 @@ export class TodoController {
       input: { completed: result.data.completed, id: Number(id) }
     })
 
-    res.status(201).json({ message: 'Todo updated!', result: todoUpdated })
+    if (todoUpdated.rowCount === 0) {
+      return res.status(200).json({ message: `There is not todo with ID ${id} to update` })
+    }
+
+    res.status(201).json({ message: 'Todo status updated!' })
   }
 
   static async updateAllTodo(req: Request, res: Response) {
-    const data = req.body
     const { id } = req.params
+    const { title, description } = req.body
 
-    await TodoModel.updateAllTodo({ input: data, id: Number(id) })
+    if (!title && !description) {
+      return res.status(400).json({ error: 'Todo title or description is not in the body' })
+    }
+
+    await TodoModel.updateAllTodo({ input: { title, description }, id: Number(id) })
 
     res.status(201).json({ message: 'Todo Updated!' })
   }
