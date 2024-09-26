@@ -71,7 +71,6 @@ export class TodoController {
     if (!title && !description) {
       return res.status(400).json({ error: 'Todo title or description is not in the body' })
     }
-
     await TodoModel.updateAllTodo({ input: { title, description }, id: Number(id) })
 
     res.status(201).json({ message: 'Todo Updated!' })
