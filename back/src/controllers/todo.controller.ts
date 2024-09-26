@@ -74,6 +74,10 @@ export class TodoController {
 
     const todoDeleted = await TodoModel.delete({ input: Number(id) })
 
-    res.status(200).json({ message: 'Todo deleted!', result: todoDeleted })
+    if (todoDeleted.rowCount === 0) {
+      return res.status(200).json({ message: 'Cannot find todo to delete' })
+    }
+
+    res.status(200).json({ message: 'Todo deleted!' })
   }
 }
