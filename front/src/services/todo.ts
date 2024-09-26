@@ -26,3 +26,14 @@ export const createTodo = async (todo: CreateTodo) => {
   const data = await result.json()
   console.log(data)
 }
+
+export const deleteTodo = async (id: number) => {
+  const result = await fetch(`http://localhost:4000/todo/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  const data = await result.json()
+  console.log(data)
+}

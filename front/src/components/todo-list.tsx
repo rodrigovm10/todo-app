@@ -1,4 +1,5 @@
-import { Trash2 } from 'lucide-react'
+import { Todo } from '@/interfaces'
+import { Pencil, Trash2 } from 'lucide-react'
 import { useTodo } from '@/hooks/useTodo'
 
 import {
@@ -14,48 +15,59 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Todo } from '@/interfaces'
-import { Textarea } from './ui/textarea'
+import { Textarea } from '@/components/ui/textarea'
 
 export function TodoList() {
-  const { todos } = useTodo()
+  const { todos, removeTodo } = useTodo()
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
-
   return (
     <>
+      {typeof todos.length === 'undefined' && (
+        <p className='text-2xl text-center opacity-30'>No hay Tareas</p>
+      )}
       <ul className='space-y-3'>
-        {todos.map(todo => (
-          <li
-            key={todo.id}
-            onClick={() => setEditingTodo(todo)}
-            className='flex items-center justify-between p-3 bg-white shadow-sm rounded-lg'
-          >
-            <div className='flex items-center'>
-              <Checkbox
-                id={`todo-${todo.id}`}
-                checked={todo.completed}
-                // onCheckedChange={() => toggleTodo(todo.id)}
-                className='mr-3'
-              />
-              <label
-                htmlFor={`todo-${todo.id}`}
-                className={`text-sm ${
-                  todo.completed ? 'line-through text-gray-500' : 'text-gray-700'
-                }`}
-              >
-                {todo.title}
-              </label>
-            </div>
-            <Button
-              variant='ghost'
-              // onClick={() => removeTodo(todo.id)}
-              className='text-gray-500 hover:text-red-500'
+        {todos.length &&
+          todos?.map(todo => (
+            <li
+              key={todo.id}
+              className='flex items-center justify-between p-3 bg-white shadow-sm rounded-lg'
             >
-              <Trash2 className='h-4 w-4' />
-              <span className='sr-only'>Remove todo</span>
-            </Button>
-          </li>
-        ))}
+              <div className='flex items-center'>
+                <Checkbox
+                  id={`todo-${todo.id}`}
+                  checked={todo.completed}
+                  // onCheckedChange={() => toggleTodo(todo.id)}
+                  className='mr-3'
+                />
+                <label
+                  htmlFor={`todo-${todo.id}`}
+                  className={`text-sm ${
+                    todo.completed ? 'line-through text-gray-500' : 'text-gray-700'
+                  }`}
+                >
+                  {todo.title}
+                </label>
+              </div>
+              <div>
+                <Button
+                  variant='ghost'
+                  onClick={() => setEditingTodo(todo)}
+                  className='text-gray-500 hover:text-red-500'
+                >
+                  <Pencil className='h-4 w-4' />
+                  <span className='sr-only'>Editar tarea</span>
+                </Button>
+                <Button
+                  variant='ghost'
+                  onClick={() => removeTodo(todo.id)}
+                  className='text-gray-500 hover:text-red-500'
+                >
+                  <Trash2 className='h-4 w-4' />
+                  <span className='sr-only'>Eliminar tarea</span>
+                </Button>
+              </div>
+            </li>
+          ))}
       </ul>
       <Dialog
         open={editingTodo !== null}
