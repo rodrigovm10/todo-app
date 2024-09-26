@@ -1,4 +1,4 @@
-import { CreateTodo } from '@/interfaces'
+import { CreateTodo, UpdateTodo } from '@/interfaces'
 
 export const fetchAllTodos = async () => {
   const result = await fetch('http://localhost:4000/todo')
@@ -34,6 +34,19 @@ export const deleteTodo = async (id: number) => {
       'Content-Type': 'application/json'
     }
   })
+  const data = await result.json()
+  console.log(data)
+}
+
+export const updateTodo = async ({ id, todo }: { id: number; todo: UpdateTodo }) => {
+  const result = await fetch(`http://localhost:4000/todo/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(todo)
+  })
+  console.log(todo)
   const data = await result.json()
   console.log(data)
 }

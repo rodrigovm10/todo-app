@@ -18,8 +18,9 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Textarea } from '@/components/ui/textarea'
 
 export function TodoList() {
-  const { todos, removeTodo } = useTodo()
+  const { todos, removeTodo, editTodo } = useTodo()
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
+
   return (
     <>
       {typeof todos.length === 'undefined' && (
@@ -94,6 +95,15 @@ export function TodoList() {
                 id='title'
                 defaultValue={editingTodo?.title}
                 className='col-span-3'
+                onChange={e =>
+                  setEditingTodo(prevState => {
+                    if (prevState) {
+                      return { ...prevState, title: e.target.value }
+                    } else {
+                      return { id: 0, description: '', title: e.target.value, completed: false }
+                    }
+                  })
+                }
               />
             </div>
             <div className='grid grid-cols-4 items-center gap-4'>
@@ -106,12 +116,31 @@ export function TodoList() {
               <Textarea
                 id='description'
                 defaultValue={editingTodo?.description}
+                onChange={e =>
+                  setEditingTodo(prevState => {
+                    if (prevState) {
+                      return { ...prevState, description: e.target.value }
+                    } else {
+                      return { id: 0, description: '', title: e.target.value, completed: false }
+                    }
+                  })
+                }
                 className='col-span-3'
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type='submit'>Save changes</Button>
+            <Button
+              onClick={() => {
+                editTodo({
+                  id: editingTodo?.id,
+                  todo: { title: editingTodo?.title, description: editingTodo?.description }
+                })
+                setEditingTodo(null)
+              }}
+            >
+              Guardar Cambios
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

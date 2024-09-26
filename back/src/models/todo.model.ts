@@ -45,7 +45,7 @@ export class TodoModel {
 
     const text = 'UPDATE todo SET title = $1, description = $2 WHERE id = $3'
     const values = [title, description, id]
-    console.log(id)
+    console.log(values)
 
     const query = await db.query(text, values)
 
