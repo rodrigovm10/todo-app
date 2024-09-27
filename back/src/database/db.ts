@@ -19,7 +19,7 @@ export async function connectDB() {
   }
 }
 
-export const queryInsert = (text: string, params: Array<any>) => {
+export const query = (text: string, params: Array<any>) => {
   return client.query(text, params)
 }
 

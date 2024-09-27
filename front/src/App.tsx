@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { TodoList } from './components/todo-list'
+import { Textarea } from './components/ui/textarea'
+import { useTodo } from './hooks/useTodo'
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const { addTodo, setNewTodo, newTodo } = useTodo()
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
+      <div className='max-w-md w-full space-y-8'>
+        <div>
+          <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>Todo List</h2>
+        </div>
+        <div className='mt-8 space-y-6'>
+          <div className='flex flex-col gap-y-3'>
+            <Input
+              type='text'
+              value={newTodo.title}
+              onChange={e => setNewTodo(prevTodo => ({ ...prevTodo, title: e.target.value }))}
+              placeholder='Añade un título'
+              className='flex-grow mr-2'
+            />
+            <Textarea
+              placeholder='Añade una descripción (opcional)'
+              value={newTodo.description}
+              onChange={e => setNewTodo(prevTodo => ({ ...prevTodo, description: e.target.value }))}
+              className='w-full'
+            />
+            <Button onClick={addTodo}>Añadir</Button>
+          </div>
+          <TodoList />
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
-
-export default App
