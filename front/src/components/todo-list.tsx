@@ -53,7 +53,7 @@ export function TodoList() {
                 <Button
                   variant='ghost'
                   onClick={() => setEditingTodo(todo)}
-                  className='text-gray-500 hover:text-red-500'
+                  className='text-gray-500 hover:text-green-600'
                 >
                   <Pencil className='h-4 w-4' />
                   <span className='sr-only'>Editar tarea</span>
