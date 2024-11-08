@@ -11,7 +11,7 @@ export class TodoController {
     const result = await TodoModel.getAll()
 
     if (result.rows.length === 0) {
-      return res.status(200).json({ message: 'There is not todos' })
+      return res.status(404).json({ message: 'There is not todos' })
     }
 
     res.status(200).json(result.rows)
@@ -23,7 +23,7 @@ export class TodoController {
 
     // If rowCount === 0
     if (!result.rowCount) {
-      return res.status(200).json({ message: `There is not todo with ID ${id}` })
+      return res.status(401).json({ message: `There is not todo with ID ${id}` })
     }
 
     res.status(200).json(result.rows)
@@ -59,15 +59,19 @@ export class TodoController {
     })
 
     if (todoUpdated.rowCount === 0) {
-      return res.status(200).json({ message: `There is not todo with ID ${id} to update` })
+      return res.status(404).json({ message: `There is not todo with ID ${id} to update` })
     }
 
     res.status(201).json({ message: 'Todo status updated!' })
   }
 
   static async updateAllTodo(req: Request, res: Response) {
-    const { id } = req.params
+    const id = req.params.id
     const { title, description } = req.body
+
+    if (!id) {
+      return res.status(400).json({ message: 'Todo ID must be in the URL!' })
+    }
 
     if (!title && !description) {
       return res.status(400).json({ error: 'Todo title or description is not in the body' })
@@ -87,7 +91,7 @@ export class TodoController {
     const todoDeleted = await TodoModel.delete({ input: Number(id) })
 
     if (todoDeleted.rowCount === 0) {
-      return res.status(200).json({ message: 'Cannot find todo to delete' })
+      return res.status(404).json({ message: 'Cannot find todo to delete' })
     }
 
     res.status(200).json({ message: 'Todo deleted!' })
