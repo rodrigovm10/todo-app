@@ -1,0 +1,60 @@
+services:
+  postgres_db:
+    container_name: postgres_db
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: rvega
+      POSTGRES_PASSWORD: isa042023
+      POSTGRES_DB: todo
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER}']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    container_name: adminer
+    image: adminer:latest
+    restart: always
+    depends_on:
+      - postgres_db
+    ports:
+      - 9090:8080
+
+  backend:
+    container_name: todo-backend
+    build:
+      context: ./back
+      args:
+        DB_HOST: ${DB_HOST}
+        DB_PORT: ${DB_PORT}
+        DB_USER: ${DB_USER}
+        DB_PASSWORD: ${DB_PASSWORD}
+        DB_NAME: ${DB_NAME}
+        PORT: ${PORT}
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+
+  frontend:
+    container_name: todo-frontend
+    build:
+      context: ./front
+      args:
+        VITE_REACT_API_URL_DEV: ${VITE_REACT_API_URL_DEV}
+    env_file:
+      - .env
+    ports:
+      - 5173:5173
+    depends_on:
+      - backend

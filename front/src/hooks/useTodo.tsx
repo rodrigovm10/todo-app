@@ -56,7 +56,7 @@ export function useTodo() {
 
   useEffect(() => {
     fetchData()
-  }, [todos])
+  }, [])
 
   return {
     todos,
