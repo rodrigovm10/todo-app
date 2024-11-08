@@ -3,10 +3,10 @@ import { Todo, TodoUpdateAll } from '../interfaces/todo.interface'
 
 const todoSchema = z.object({
   title: z.string({
-    invalid_type_error: 'Todo title must be a stirng',
+    invalid_type_error: 'Todo title must be a string',
     required_error: 'Todo title is required'
   }),
-  description: z.string({ invalid_type_error: 'Todo description must be a strign' }).optional(),
+  description: z.string({ invalid_type_error: 'Todo description must be a string' }).optional(),
   completed: z.boolean().default(false)
 })
 
@@ -17,10 +17,10 @@ const todoUpdateSchema = z.object({
 const todoUpdateAllSchema = z.object({
   title: z
     .string({
-      invalid_type_error: 'Todo title must be a stirng'
+      invalid_type_error: 'Todo title must be a string'
     })
     .optional(),
-  description: z.string({ invalid_type_error: 'Todo description must be a strign' }).optional()
+  description: z.string({ invalid_type_error: 'Todo description must be a string' }).optional()
 })
 
 export function validateTodo(input: Todo) {

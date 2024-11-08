@@ -3,7 +3,7 @@ import cors from 'cors'
 import { todoRouter } from './routes/todo.route'
 import { connectDB } from './database/db'
 
-const app = express()
+export const app = express()
 const port = process.env.PORT || 3000
 
 // Middlewares
@@ -11,7 +11,7 @@ app.use(cors())
 app.use(express.json())
 
 // Routes
-app.use('/todo', todoRouter)
+app.use('/api/todo', todoRouter)
 
 // Start the server after connecting to the database
 async function startServer() {

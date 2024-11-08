@@ -1,38 +1,20 @@
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { TodoList } from './components/todo-list'
-import { Textarea } from './components/ui/textarea'
-import { useTodo } from './hooks/useTodo'
+import { Form } from '@/components/form'
+import { Header } from '@/components/header'
+import { TodoList } from '@/components/todo-list'
+import { TodoProvider } from '@/context/todoContext'
 
 export default function App() {
-  const { addTodo, setNewTodo, newTodo } = useTodo()
-
   return (
-    <div className='min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
-      <div className='max-w-md w-full space-y-8'>
-        <div>
-          <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>Todo List</h2>
-        </div>
-        <div className='mt-8 space-y-6'>
-          <div className='flex flex-col gap-y-3'>
-            <Input
-              type='text'
-              value={newTodo.title}
-              onChange={e => setNewTodo(prevTodo => ({ ...prevTodo, title: e.target.value }))}
-              placeholder='Añade un título'
-              className='flex-grow mr-2'
-            />
-            <Textarea
-              placeholder='Añade una descripción (opcional)'
-              value={newTodo.description}
-              onChange={e => setNewTodo(prevTodo => ({ ...prevTodo, description: e.target.value }))}
-              className='w-full'
-            />
-            <Button onClick={addTodo}>Añadir</Button>
+    <TodoProvider>
+      <div className='min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-md w-full space-y-8'>
+          <div className='mt-8 space-y-6'>
+            <Header />
+            <Form />
+            <TodoList />
           </div>
-          <TodoList />
         </div>
       </div>
-    </div>
+    </TodoProvider>
   )
 }

@@ -1,6 +1,6 @@
 import { Todo, CreateTodo, UpdateTodo } from '@/interfaces'
 import { fetchAllTodos, createTodo, deleteTodo, updateTodo, updateCompleted } from '@/services/todo'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const NEW_TODO_STATE = { title: '', description: '' }
 
@@ -9,43 +9,65 @@ export function useTodo() {
   const [isEditingTodo, setIsEditingTodo] = useState(false)
   const [newTodo, setNewTodo] = useState<CreateTodo>(NEW_TODO_STATE)
 
-  const addTodo = async () => {
+  const fetchData = useCallback(async () => {
+    const todosFetched = await fetchAllTodos()
+    setTodos(todosFetched)
+  }, [])
+
+  const onChangeTitle = (title: string) => {
+    setNewTodo(prevTodo => ({ ...prevTodo, title }))
+  }
+
+  const onChangeDescription = (description: string) => {
+    setNewTodo(prevTodo => ({ ...prevTodo, description }))
+  }
+
+  const addTodo = useCallback(async () => {
     await createTodo(newTodo)
     setNewTodo(NEW_TODO_STATE)
-  }
+    await fetchData() // Refresca los todos después de agregar
+  }, [newTodo, fetchData])
 
-  const removeTodo = async (id: number) => {
-    await deleteTodo(id)
-  }
+  const removeTodo = useCallback(
+    async (id: number) => {
+      await deleteTodo(id)
+      await fetchData() // Refresca los todos después de eliminar
+    },
+    [fetchData]
+  )
 
-  const editTodo = async ({ id, todo }: { id?: number; todo: UpdateTodo }) => {
-    if (id) {
-      await updateTodo({ id, todo })
-    }
-  }
+  const editTodo = useCallback(
+    async ({ id, todo }: { id?: number; todo: UpdateTodo }) => {
+      if (id) {
+        await updateTodo({ id, todo })
+        await fetchData() // Refresca los todos después de editar
+      }
+    },
+    [fetchData]
+  )
 
-  const toggleTodo = async ({ id, completed }: { id: number; completed: boolean }) => {
-    await updateCompleted({ id, completed })
-  }
+  const toggleTodo = useCallback(
+    async ({ id, completed }: { id: number; completed: boolean }) => {
+      await updateCompleted({ id, completed })
+      await fetchData() // Refresca los todos después de cambiar el estado
+    },
+    [fetchData]
+  )
 
   useEffect(() => {
-    async function fetchData() {
-      const todosFetched = await fetchAllTodos()
-      setTodos(todosFetched)
-    }
-
     fetchData()
-  }, [addTodo, removeTodo, editTodo])
+  }, [todos])
 
   return {
     todos,
-    setIsEditingTodo,
-    isEditingTodo,
-    addTodo,
-    setNewTodo,
     newTodo,
+    isEditingTodo,
+    setIsEditingTodo,
+    addTodo,
     removeTodo,
     editTodo,
-    toggleTodo
+    toggleTodo,
+    onChangeTitle,
+    onChangeDescription
   }
 }
