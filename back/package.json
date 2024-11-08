@@ -7,7 +7,7 @@
     "dev": "tsnd --respawn --clear --env-file=.env src/app.ts",
     "build": "rimraf ./dist && tsc",
     "start": "npm run build && node dist/app.js",
-    "test": "jest --verbose"
+    "test": "jest --verbose --watch"
   },
   "keywords": [],
   "author": "",

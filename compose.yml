@@ -17,6 +17,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1GB
+        reservations:
+          cpus: '2'
+          memory: 1GB
 
   adminer:
     container_name: adminer
@@ -26,6 +34,14 @@ services:
       - postgres_db
     ports:
       - 9090:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 500MB
+        reservations:
+          cpus: '0.15'
+          memory: 350MB
 
   backend:
     container_name: todo-backend
@@ -45,6 +61,14 @@ services:
     depends_on:
       postgres_db:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.35'
+          memory: 500MB
+        reservations:
+          cpus: '0.25'
+          memory: 250MB
 
   frontend:
     container_name: todo-frontend
@@ -58,3 +82,11 @@ services:
       - 5173:5173
     depends_on:
       - backend
+    deploy:
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 500MB
+        reservations:
+          cpus: '0.20'
+          memory: 250MB
